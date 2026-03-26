@@ -352,6 +352,12 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     comentario: hasFoto?'':document.getElementById('comentario').value.trim(),
   };
 
+  // ── Abrir WhatsApp ANTES del async (Safari requiere que sea sincrónico)
+  const msgWAInicial = generarMensajeWA(payload);
+  const waUrlInicial = 'https://wa.me/54' + '3513454412' + '?text=' + encodeURIComponent(msgWAInicial);
+  document.getElementById('waBtn').href = waUrlInicial;
+  window.location.href = waUrlInicial; // abre WhatsApp sin popup bloqueado
+
   // UI: enviando
   const btn=document.getElementById('submitBtn');
   const spinner=document.getElementById('spinner');
@@ -414,8 +420,7 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
   const msgWA = generarMensajeWA(payload);
   const waUrl = 'https://wa.me/54' + '3513454412' + '?text=' + encodeURIComponent(msgWA);
   document.getElementById('waBtn').href = waUrl;
-  // Abrir WhatsApp automáticamente
-  window.open(waUrl, '_blank');
+
   if(urlDrive && urlDrive!=='ok'){
     document.getElementById('driveLinkWrap').innerHTML='<a class="drive-link" href="'+urlDrive+'" target="_blank">📁 VER CARPETA EN DRIVE</a>';
   } else if(urlDrive==='ok'){ document.getElementById('driveLinkWrap').innerHTML='<p style="font-size:14px;color:#2e7d32;margin-top:8px">📁 Guardado en Google Drive correctamente.</p>'; } else if(record.estado==='sin-configurar'){
